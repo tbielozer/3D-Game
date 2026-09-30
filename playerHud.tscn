@@ -1,0 +1,48 @@
+[gd_scene load_steps=2 format=3 uid="uid://bfyg3uaiw3gfg"]
+
+[ext_resource type="Script" path="res://player_hud.gd" id="1_dsv0u"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_dsv0u")
+
+[node name="UpperHUD" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="UpperHUD"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UpperHUD/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Action1" type="Label" parent="UpperHUD/HBoxContainer2/HBoxContainer"]
+layout_mode = 2
+text = "1: Delete Mode"
+
+[node name="Action2" type="Label" parent="UpperHUD/HBoxContainer2/HBoxContainer"]
+layout_mode = 2
+text = "2: Place Wall
+"
+
+[node name="Action3" type="Label" parent="UpperHUD/HBoxContainer2/HBoxContainer"]
+layout_mode = 2
+text = "3: Summon Car"
+
+[node name="Action4" type="Label" parent="UpperHUD/HBoxContainer2/HBoxContainer"]
+layout_mode = 2
+text = "4: Paint Car
+"
+
+[node name="Label" type="Label" parent="UpperHUD/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Special Action"
+horizontal_alignment = 2

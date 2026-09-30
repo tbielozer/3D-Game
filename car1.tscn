@@ -1,0 +1,66 @@
+[gd_scene load_steps=5 format=3 uid="uid://cupqyqav0x2mo"]
+
+[ext_resource type="Script" path="res://car_1.gd" id="1_dtwho"]
+[ext_resource type="ArrayMesh" uid="uid://bv5bnesjrq5rt" path="res://Car1.obj" id="2_oa21b"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_h8lmh"]
+points = PackedVector3Array(-0.864159, -0.483754, 0.161869, 1.01587, 0.531746, -0.0285697, -1.01587, 0.531746, -0.0285697, 0.463567, 0.48599, 0.4226, 1.01587, -0.515873, -0.0285697, 0.463567, -0.470117, 0.4226, -0.770842, -0.481281, -0.104951, -0.764577, 0.493178, 0.25, 0.770842, 0.497154, -0.104951, -0.0549254, -0.445553, 0.409203, 0.823348, -0.477305, 0.25, 0.770842, -0.481281, -0.104951, -0.770842, 0.497154, -0.104951, -1.01587, -0.515873, -0.0285697, -0.0549254, 0.461426, 0.409203, 0.823348, 0.493178, 0.25, -0.764577, -0.477305, 0.25, 0.906569, -0.490755, 0.161869, -0.864159, 0.499627, 0.161869, 0.894521, 0.5, 0.161869, -0.965411, -0.489854, 0.0412165)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_k0tc6"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:linear_velocity")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:rotation")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath(".:driver_id")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+
+[node name="Node3D" type="VehicleBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.5, 0, 0, 0)
+collision_mask = 7
+contact_monitor = true
+max_contacts_reported = 4
+script = ExtResource("1_dtwho")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+mesh = ExtResource("2_oa21b")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_h8lmh")
+
+[node name="WheelFL" type="VehicleWheel3D" parent="."]
+transform = Transform3D(-6.55671e-09, 0, -0.15, 0, 0.15, 0, 0.15, 0, -6.55671e-09, -0.74547, 0.0313868, 0.499237)
+use_as_steering = true
+
+[node name="WheelFR" type="VehicleWheel3D" parent="."]
+transform = Transform3D(-6.55671e-09, 0, -0.15, 0, 0.15, 0, 0.15, 0, -6.55671e-09, -0.74547, 0.0298333, -0.502105)
+use_as_steering = true
+
+[node name="WheelBR" type="VehicleWheel3D" parent="."]
+transform = Transform3D(-6.55671e-09, 0, -0.15, 0, 0.15, 0, 0.15, 0, -6.55671e-09, 0.745831, 0.0325356, -0.502105)
+use_as_traction = true
+
+[node name="WheelBL" type="VehicleWheel3D" parent="."]
+transform = Transform3D(-6.55671e-09, 0, -0.15, 0, 0.15, 0, 0.15, 0, -6.55671e-09, 0.745831, 0.0323637, 0.49704)
+use_as_traction = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -0.022835, 0.569985, 0)
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_k0tc6")
+
+[node name="DriversSeat" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.319398, 0.374258)
+
+[node name="ExitPoint" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.650403, 1.29763)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
