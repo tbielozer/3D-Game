@@ -9,6 +9,10 @@ class_name Terrain
 ## the scene, then tweak the exports below — @tool makes it regenerate
 ## live in the editor.
 
+var car_scene = preload("res://car1.tscn")  # update to your actual car scene path
+const CAR_SPAWN_HEIGHT = 10.0  # drop the car in from slightly above so it doesn't clip the terrain
+var npc_scene = preload("res://npc.tscn")
+
 ## World-space size of the terrain along X and Z.
 @export var size: Vector2 = Vector2(50, 50):
 	set(value):
@@ -53,6 +57,7 @@ class_name Terrain
 var _heights: PackedFloat32Array = PackedFloat32Array()
 
 func _ready() -> void:
+	print("Terrain ready. Editor: ", Engine.is_editor_hint())
 	if not noise:
 		noise = FastNoiseLite.new()
 		noise.seed = randi()
@@ -60,6 +65,38 @@ func _ready() -> void:
 		noise.fractal_octaves = 4
 	_connect_noise()
 	_generate()
+	
+
+func spawn_objects() -> void:
+	if not multiplayer.has_multiplayer_peer():
+		print("No multiplayer peer yet")
+		return
+
+	if not multiplayer.is_server():
+		return
+	for i in range(5):
+		var x := randf_range(-size.x * 0.5, size.x * 0.5)
+		var z := randf_range(-size.y * 0.5, size.y * 0.5)
+
+		var car := car_scene.instantiate() as VehicleBody3D
+		get_tree().current_scene.add_child(car)   # add first...
+		car.global_position = to_global(Vector3(  # ...then set global position
+			x,
+			get_height_at(x, z) + CAR_SPAWN_HEIGHT,
+			z
+		))
+
+		var npc := npc_scene.instantiate() as Node3D
+		get_tree().current_scene.add_child(npc)
+
+		var npc_x := clampf(x + randf_range(-10.0, 10.0), -size.x * 0.5, size.x * 0.5)
+		var npc_z := clampf(z + randf_range(-10.0, 10.0), -size.y * 0.5, size.y * 0.5)
+		npc.global_position = to_global(Vector3(
+			npc_x,
+			get_height_at(npc_x, npc_z) + CAR_SPAWN_HEIGHT,
+			npc_z
+		))
+		
 
 func _connect_noise() -> void:
 	if noise and not noise.changed.is_connected(_generate):

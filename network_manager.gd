@@ -36,6 +36,11 @@ func host_game() -> void:
 	# (MultiplayerSpawner then replicates that spawn to every already-connected
 	# peer, AND to the new peer as part of their initial sync.)
 	multiplayer.peer_connected.connect(_spawn_player)
+	
+	await get_tree().process_frame
+
+	var terrain := get_tree().current_scene.get_node("StaticBody3D2") as Terrain
+	terrain.spawn_objects()
 
 
 func join_game(ip_address: String) -> void:

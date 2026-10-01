@@ -49,7 +49,7 @@ func _physics_process(delta: float) -> void:
 			else:
 				position.x = x_lim
 		if abs(position.z) > z_lim:
-			if position.x < 0:
+			if position.z < 0:
 				position.z = -z_lim
 			else:
 				position.z = z_lim
